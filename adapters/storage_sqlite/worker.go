@@ -43,6 +43,10 @@ func newTenantWorker(tenantID string, dbPath string) (*tenantWorker, error) {
 		return nil, err
 	}
 
+	if err := db.Ping(); err != nil {
+		return nil, fmt.Errorf("failed to ping database: %w", err)
+	}
+
 	// SQLite concurrent reads are fine in WAL mode, but we restrict to 1 open conn
 	// if we're using a single worker thread for writes. However, reads can happen
 	// concurrently with a single write in WAL mode.
