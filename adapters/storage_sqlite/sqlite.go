@@ -74,21 +74,41 @@ func (e *sqliteEngine) ExecuteMigration(ctx context.Context, tenantID string, bl
 }
 
 func (e *sqliteEngine) Insert(ctx context.Context, tenantID string, collection string, record ports.Record) (string, error) {
-	return "", nil
+	worker, err := e.getWorker(tenantID)
+	if err != nil {
+		return "", err
+	}
+	return worker.insert(ctx, collection, record)
 }
 
 func (e *sqliteEngine) Update(ctx context.Context, tenantID string, collection string, id string, record ports.Record) error {
-	return nil
+	worker, err := e.getWorker(tenantID)
+	if err != nil {
+		return err
+	}
+	return worker.update(ctx, collection, id, record)
 }
 
 func (e *sqliteEngine) Delete(ctx context.Context, tenantID string, collection string, id string) error {
-	return nil
+	worker, err := e.getWorker(tenantID)
+	if err != nil {
+		return err
+	}
+	return worker.delete(ctx, collection, id)
 }
 
 func (e *sqliteEngine) FindByID(ctx context.Context, tenantID string, collection string, id string) (ports.Record, error) {
-	return nil, nil
+	worker, err := e.getWorker(tenantID)
+	if err != nil {
+		return nil, err
+	}
+	return worker.findByID(ctx, collection, id)
 }
 
 func (e *sqliteEngine) Select(ctx context.Context, tenantID string, query ports.Query) ([]ports.Record, error) {
-	return nil, nil
+	worker, err := e.getWorker(tenantID)
+	if err != nil {
+		return nil, err
+	}
+	return worker.selectRecords(ctx, query)
 }
