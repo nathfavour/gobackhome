@@ -66,7 +66,11 @@ func (e *sqliteEngine) getWorker(tenantID string) (*tenantWorker, error) {
 }
 
 func (e *sqliteEngine) ExecuteMigration(ctx context.Context, tenantID string, blueprint ports.SchemaBlueprint) error {
-	return nil
+	worker, err := e.getWorker(tenantID)
+	if err != nil {
+		return err
+	}
+	return worker.migrate(ctx, blueprint)
 }
 
 func (e *sqliteEngine) Insert(ctx context.Context, tenantID string, collection string, record ports.Record) (string, error) {
