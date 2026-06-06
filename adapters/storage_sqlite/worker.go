@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/nathfavour/gobackhome/core/ports"
 	_ "github.com/mattn/go-sqlite3"
 )
 
